@@ -2,7 +2,7 @@
 
 <img src="resources/logo-256.png" width="72" align="right" alt="logo">
 
-zcode-monitor 的 **Qt Widgets 原生桌面重写版** —— 用 C++/Qt 6 重写的 ZCode agent 本地观测面板，功能与原 Node.js/Web 版完全对等（只多不少）。
+zcode-monitor 的 **Qt Widgets 原生桌面重写版** —— 用 C++/Qt 6 写的 ZCode agent 本地观测面板，
 
 只读访问 `~/.zcode/cli/` 下的 SQLite 主库与 JSONL 事件流，把一次 agent 运行中发生的一切（模型请求、token 消耗、工具调用、子 agent 派生、推理链）整理成可查、可追溯的桌面界面。**全程不修改任何 ZCode 数据**（唯一例外：ZCode 退出后自动/手动执行一次 WAL checkpoint，把内存中的数据折入主库以保住历史）。
 
@@ -17,16 +17,6 @@ zcode-monitor 的 **Qt Widgets 原生桌面重写版** —— 用 C++/Qt 6 重�
 | **原始数据** | 19 张表白名单浏览器，排序/降序/where 条件，JSON 单元格美化展开，行 JSON 查看 |
 | **运行原理** | ER 图 + turn 流程图 + 8 张概念卡（全部用你的真实数据插值）+ 真实推理片段示例 |
 | **全局** | Dark/Light 双主题（按钮 / `t` 快捷键 / QSettings 持久化）、顶栏健康轮询（DB 状态 · ZCode 运行中 · WAL 大小）、WAL checkpoint 按钮 + toast |
-
-## 相对 Web 版的增强
-
-- **Windows 进程探测修复**：原版 `ps -axo comm` 在 Windows 恒失败 → 自动 checkpoint 从不触发；本版用原生 Toolhelp32Snapshot 枚举进程，ZCode 退出后真正自动折叠 WAL。
-- **实时流水位修复**：原版 SSE 水位初始化取了全表最老一行（开机回放全部历史）；本版取最新行，只推应用启动后的新事件。
-- **span 树构建修复**：原版 `indexOf` 是 O(n²) 且重复挂载子节点导致深链爆炸；本版改为索引 Map + 防环。
-- **原始数据查看器**：where 输入保留（与原版一致的调试能力），但表名/排序列有白名单校验。
-- **图表全部自绘**：无 Chart.js/CDN 依赖，离线可用。
-- **`--selftest`**：对真实数据库跑 21 项数据层检查，输出 JSON 化的验证报告（exit code 0/1）。
-- **`--screenshot [dir]`**：自动遍历全部页面/标签页截图保存后退出，用于回归验证。
 
 ## 环境要求
 
@@ -54,7 +44,7 @@ cmake --build build
 ./build/bin/zcode-monitor.exe --screenshot shots  # 自动截图导览（回归验证用）
 ```
 
-### 环境变量（与原版同名同义）
+### 环境变量
 
 | 变量 | 默认 | 说明 |
 |---|---|---|
