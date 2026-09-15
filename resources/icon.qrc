@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file alias="zcode-monitor.ico">zcode-monitor.ico</file>
+        <file alias="logo-256.png">logo-256.png</file>
+    </qresource>
+</RCC>
